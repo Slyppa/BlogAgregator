@@ -12,7 +12,7 @@ import (
 
 func handlerRegister(s *state, cmd command) error {
 	if len(cmd.Args) != 1 {
-		return fmt.Errorf("usage: %s <name>", cmd.Name)
+		return fmt.Errorf("usage: %v <name>", cmd.Name)
 	}
 
 	name := cmd.Args[0]
@@ -41,7 +41,6 @@ func handlerLogin(s *state, cmd command) error {
 	if len(cmd.Args) != 1 {
 		return fmt.Errorf("usage: %s <name>", cmd.Name)
 	}
-
 	name := cmd.Args[0]
 
 	_, err := s.db.GetUser(context.Background(), name)
@@ -51,10 +50,10 @@ func handlerLogin(s *state, cmd command) error {
 
 	err = s.cfg.SetUser(name)
 	if err != nil {
-		return fmt.Errorf("couldn't set current user: %v", err)
+		return fmt.Errorf("couldn't set current user: %w", err)
 	}
 
-	fmt.Printf("User switched to %v successfully!\n", name)
+	fmt.Println("User switched successfully!")
 	return nil
 }
 
