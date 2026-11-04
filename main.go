@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
 
 	"github.com/slyppa/blog_agregator/internal/config"
 )
@@ -16,16 +16,29 @@ func main() {
 	if err != nil {
 		log.Fatalf("error reading config: %v", err)
 	}
-	fmt.Printf("Read config: %+v\n", cfg)
 
-	err = cfg.SetUser("lane")
-	if err != nil {
-		log.Fatalf("couldn't set current user: %v", err)
+	s := &state{
+		cfg: &cfg,
 	}
 
-	cfg, err = config.Read()
-	if err != nil {
-		log.Fatalf("error reading config: %v", err)
+	cmds := commands{
+		cmd: map[string]func(*state, command) error{},
 	}
-	fmt.Printf("Read config again: %+v\n", cfg)
+
+	cmds.register("login", handlerLogin)
+
+	args := os.Args
+	if len(args) < 2 {
+		log.Fatalf("no command passed")
+	}
+
+	cmd := command{
+		name: args[1],
+		args: args[2:],
+	}
+
+	err = cmds.run(s, cmd)
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
 }

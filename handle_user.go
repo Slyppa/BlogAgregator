@@ -14,6 +14,6 @@ func handlerLogin(s *state, cmd command) error {
 	if err != nil {
 		return fmt.Errorf("couldn't set current user: %v", err)
 	}
-	fmt.Printf("set %v as user", cmd.args[0])
+	fmt.Printf("set %v as user\n", cmd.args[0])
 	return nil
 }
