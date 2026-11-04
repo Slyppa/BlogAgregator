@@ -1,6 +1,6 @@
 package main
 
-import "errors"
+import "fmt"
 
 type command struct {
 	name string
@@ -18,7 +18,7 @@ func (c *commands) register(name string, f func(*state, command) error) {
 func (c *commands) run(s *state, cmd command) error {
 	value, ok := c.cmd[cmd.name]
 	if !ok {
-		return errors.New("fail to run command")
+		fmt.Errorf("fail to run command")
 	}
 	// runs command
 	return value(s, cmd)
