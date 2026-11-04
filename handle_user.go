@@ -1,19 +1,19 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 )
 
 func handlerLogin(s *state, cmd command) error {
-	if len(cmd.args) == 0 {
-		return errors.New("no arguments found")
+	if len(cmd.Args) == 0 {
+		return fmt.Errorf("usage: %s <name>", cmd.Name)
 	}
 
-	err := s.cfg.SetUser(cmd.args[0])
+	err := s.cfg.SetUser(cmd.Args[0])
 	if err != nil {
 		return fmt.Errorf("couldn't set current user: %v", err)
 	}
-	fmt.Printf("set %v as user\n", cmd.args[0])
+
+	fmt.Printf("User switched to %v successfully!\n", cmd.Args[0])
 	return nil
 }

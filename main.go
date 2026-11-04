@@ -17,12 +17,12 @@ func main() {
 		log.Fatalf("error reading config: %v", err)
 	}
 
-	s := &state{
+	programState := &state{
 		cfg: &cfg,
 	}
 
 	cmds := commands{
-		cmd: map[string]func(*state, command) error{},
+		registeredCommands: make(map[string]func(*state, command) error),
 	}
 
 	cmds.register("login", handlerLogin)
@@ -32,13 +32,8 @@ func main() {
 		log.Fatalf("no command passed")
 	}
 
-	cmd := command{
-		name: args[1],
-		args: args[2:],
-	}
-
-	err = cmds.run(s, cmd)
+	err = cmds.run(programState, command{Name: args[1], Args: args[2:]})
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Fatal(err)
 	}
 }

@@ -3,22 +3,23 @@ package main
 import "fmt"
 
 type command struct {
-	name string
-	args []string
+	Name string
+	Args []string
 }
 
 type commands struct {
-	cmd map[string]func(*state, command) error
+	registeredCommands map[string]func(*state, command) error
 }
 
 func (c *commands) register(name string, f func(*state, command) error) {
-	c.cmd[name] = f
+	c.registeredCommands[name] = f
 }
 
 func (c *commands) run(s *state, cmd command) error {
-	value, ok := c.cmd[cmd.name]
+	f, ok := c.registeredCommands[cmd.Name]
 	if !ok {
 		return fmt.Errorf("fail to run command")
 	}
-	return value(s, cmd)
+
+	return f(s, cmd)
 }
