@@ -16,3 +16,6 @@ SELECT * FROM feeds;
 -- name: GetFeedByURL :one
 SELECT * FROM feeds
 WHERE url = $1;
+
+-- name: UnfollowFeed :exec
+DELETE FROM feeds WHERE url = $1;

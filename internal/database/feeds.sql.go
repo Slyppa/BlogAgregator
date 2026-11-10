@@ -107,3 +107,12 @@ func (q *Queries) GetFeeds(ctx context.Context) ([]Feed, error) {
 	}
 	return items, nil
 }
+
+const unfollowFeed = `-- name: UnfollowFeed :exec
+DELETE FROM feeds WHERE url = $1
+`
+
+func (q *Queries) UnfollowFeed(ctx context.Context, url string) error {
+	_, err := q.db.ExecContext(ctx, unfollowFeed, url)
+	return err
+}
