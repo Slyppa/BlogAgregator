@@ -29,7 +29,6 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	httpClient := http.Client{
 		Timeout: 10 * time.Second,
 	}
-
 	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
 	if err != nil {
 		return nil, err
@@ -42,13 +41,14 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	dat, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	var rssFeed RSSFeed
-	if err := xml.Unmarshal(body, &rssFeed); err != nil {
+	err = xml.Unmarshal(dat, &rssFeed)
+	if err != nil {
 		return nil, err
 	}
 
